@@ -1,7 +1,9 @@
 package com.ll.rest.global.globalExceptionHandler;
 
 import com.ll.rest.global.rsData.RsData;
+import java.util.Comparator;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +24,17 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<RsData<Void>> handle(MethodArgumentNotValidException ex) {
-        FieldError fieldError = ex.getBindingResult().getFieldError();
-        String field = fieldError.getField();
-        String code = fieldError.getCode();
-        String message = fieldError.getDefaultMessage();
+        String message = ex.getBindingResult()
+                .getAllErrors()
+                .stream()
+                .filter(error -> error instanceof FieldError)
+                .map(error -> (FieldError) error)
+                .map(error -> error.getField() + "-" + error.getCode() + "-" + error.getDefaultMessage())
+                .sorted(Comparator.comparing(String::toString))
+                .collect(Collectors.joining("\n"));
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(new RsData<>("400-" + field + "-" + code, field + " : " + message));
+                .body(new RsData<>("400-1", message));
     }
 }
