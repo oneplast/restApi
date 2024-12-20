@@ -35,11 +35,11 @@ public class BaseInitData {
             return;
         }
 
-        Member memberSystem = memberService.join("system", "1234", "시스템");
-        Member memberAdmin = memberService.join("admin", "1234", "관리자");
-        Member memberUser1 = memberService.join("user1", "1234", "유저1");
-        Member memberUser2 = memberService.join("user2", "1234", "유저2");
-        Member memberUser3 = memberService.join("user3", "1234", "유저3");
+        memberService.join("system", "1234", "시스템");
+        memberService.join("admin", "1234", "관리자");
+        memberService.join("user1", "1234", "유저1");
+        memberService.join("user2", "1234", "유저2");
+        memberService.join("user3", "1234", "유저3");
     }
 
     @Transactional
@@ -48,8 +48,11 @@ public class BaseInitData {
             return;
         }
 
-        postService.write("축구 하실 분?","14시까지 22명을 모아야 합니다.");
-        postService.write("배구 하실 분?","15시까지 12명을 모아야 합니다.");
-        postService.write("농구 하실 분?","16시까지 10명을 모아야 합니다.");
+        Member memberUser1 = memberService.findByUsername("user1").get();
+        Member memberUser2 = memberService.findByUsername("user2").get();
+
+        postService.write(memberUser1, "축구 하실 분?", "14시까지 22명을 모아야 합니다.");
+        postService.write(memberUser1, "배구 하실 분?", "15시까지 12명을 모아야 합니다.");
+        postService.write(memberUser2, "농구 하실 분?", "16시까지 10명을 모아야 합니다.");
     }
 }
