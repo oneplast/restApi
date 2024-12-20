@@ -2,6 +2,7 @@ package com.ll.rest.domain.member.member.service;
 
 import com.ll.rest.domain.member.member.entity.Member;
 import com.ll.rest.domain.member.member.repository.MemberRepository;
+import com.ll.rest.global.exceptions.ServiceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +17,9 @@ public class MemberService {
 
     public Member join(String username, String password, String nickname) {
         memberRepository.findByUsername(username)
-                .ifPresent(member -> {
-                    throw new IllegalArgumentException("이미 존재하는 회원입니다.");
+                .ifPresent(__ -> {
+                    throw new IllegalArgumentException(
+                            new ServiceException("400-1", "해당 username은 이미 사용중입니다."));
                 });
 
         Member member = Member.builder()
