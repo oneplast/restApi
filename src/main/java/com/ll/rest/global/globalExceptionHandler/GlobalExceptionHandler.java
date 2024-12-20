@@ -1,5 +1,6 @@
 package com.ll.rest.global.globalExceptionHandler;
 
+import com.ll.rest.global.app.AppConfig;
 import com.ll.rest.global.rsData.RsData;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
@@ -17,6 +18,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<RsData<Void>> handle(NoSuchElementException ex) {
+        if (AppConfig.isNotProd()) {
+            ex.printStackTrace();
+        }
+
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(new RsData<>("404-1", "해당 데이터가 존재하지 않습니다."));
@@ -24,6 +29,10 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<RsData<Void>> handle(MethodArgumentNotValidException ex) {
+        if (AppConfig.isNotProd()) {
+            ex.printStackTrace();
+        }
+
         String message = ex.getBindingResult()
                 .getAllErrors()
                 .stream()
