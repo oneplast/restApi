@@ -1,6 +1,6 @@
 package com.ll.rest.domain.member.member.entity;
 
-import com.ll.rest.global.jpa.entity.BaseEntity;
+import com.ll.rest.global.jpa.entity.BaseTime;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Member extends BaseEntity {
+public class Member extends BaseTime {
     @Column(unique = true, length = 30)
     private String username;
 
